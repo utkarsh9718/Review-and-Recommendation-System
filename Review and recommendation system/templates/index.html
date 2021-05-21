@@ -1,0 +1,102 @@
+<!-- Student Mark Predictor App GUI -->
+
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Rechasight</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+
+  <style>
+
+    h1   {color: blue;}  /* CSS code for heading h1 */
+
+    /* CSS code for button */
+    .button_css {
+    color: #494949 !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #ffffff;
+    padding: 20px;
+    border: 4px solid #494949 !important;
+    display: inline-block;
+    transition: all 0.4s ease 0s;
+    }
+    
+    .button_css:hover {
+    color: #ffffff !important;
+    background: #f6b93b;
+    border-color: #f6b93b !important;
+    transition: all 0.4s ease 0s;
+    }
+  </style>
+  <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        {% if (data != "") %}
+        var data = google.visualization.arrayToDataTable([
+      
+      {% for key, value in data.items() %}
+        {% if value is string %}
+          ['{{ key }}', '{{ value }}'],
+        {% else %}
+          ['{{ key }}', {{ value }}],
+        {% endif %}
+      {% endfor %}
+        ]);
+
+        var options = {
+          title: 'Reviews',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+        
+      {% endif %}
+      }
+    </script>
+
+</head>
+
+<body >
+
+  <!-- Show Oxstandhard Univercity Banner-->
+  <div>
+    <img src="static/images/rechasight.jpeg" class="w3-border w3-padding" style="width:100%">
+  </div>
+ <div class="login">
+	   <!-- Form Get input to predict Marks-->
+    <center>
+    <form action="{{ url_for('predict')}}"method="post">
+        
+    	<h1><input align="center" type="text" name="product_name" placeholder="Enter name of ypur product" required="required" width="48" height="10"/></h1>
+    	<br>
+        
+        <br>
+        
+        <!-- Show button -->
+        <div class="button_cont" align="center">
+            <button type="submit" class="btn btn-primary btn-block btn-large"><strong><h3>Predict</h3></strong></button></a>
+        </div>
+        
+    </form>
+    </center>
+   
+   <!-- Show predicted output using ML model --> 
+   <div>
+       <center>
+   <h2>{{ p_text }}</h2>
+   <div style="margin: 10px 0 0 10px;width: 1000px">
+    
+    <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+  </div>
+       </center>
+   </div>
+ </div>
+ 
+
+</body>
+</html>
